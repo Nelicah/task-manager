@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Task Manager - Gestor de Tareas</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header class="header">
+        <h1>📋 Task Manager</h1>
+        <p class="subtitle">Gestiona tus tareas de forma eficiente</p>
+      </header>
+
+      <!-- Loading spinner -->
+      <div id="loadingSpinner" class="loading-spinner" style="display: none">
+        <div class="spinner"></div>
+        <p>Cargando...</p>
+      </div>
+    </div>
+
+    <!-- Toast notifications -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Formulario para agregar/editar tareas -->
+    <section class="task-form-section">
+      <h2 id="form-title">➕ Nueva Tarea</h2>
+      <form id="taskForm" class="task-form">
+        <input type="hidden" id="taskId" value="" />
+
+        <div class="form-group">
+          <label for="title">Título *</label>
+          <input
+            type="text"
+            id="title"
+            name="title"
+            placeholder="Ej: Estudiar PHP avanzado"
+            required
+            maxlength="100"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="description">Descripción</label>
+          <textarea
+            id="description"
+            name="description"
+            placeholder="Detalles de la tarea..."
+            rows="3"
+            maxlength="500"
+          ></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="priority">Prioridad *</label>
+            <select id="priority" name="priority" required>
+              <option value="baja">🟢 Baja</option>
+              <option value="media" selected>🟡 Media</option>
+              <option value="alta">🔴 Alta</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="dueDate">Fecha límite</label>
+            <input type="date" id="dueDate" name="dueDate" />
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" id="submitBtn">
+            <span class="btn-icon">💾</span> Guardar Tarea
+          </button>
+          <button
+            type="button"
+            class="btn btn-secondary"
+            id="cancelBtn"
+            style="display: none"
+          >
+            <span class="btn-icon">❌</span> Cancelar
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Filtros -->
+    <section class="filters-section">
+      <div class="filters">
+        <div class="filter-group">
+          <label for="filterStatus">Estado:</label>
+          <select id="filterStatus">
+            <option value="all">Todas</option>
+            <option value="0">Pendientes</option>
+            <option value="1">Completadas</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="filterPriority">Prioridad:</label>
+          <select id="filterPriority">
+            <option value="all">Todas</option>
+            <option value="alta">Alta</option>
+            <option value="media">Media</option>
+            <option value="baja">Baja</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="🔍 Buscar tareas..."
+            class="search-input"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- Lista de tareas -->
+    <section class="tasks-section">
+      <div class="tasks-header">
+        <h2>📝 Mis Tareas</h2>
+        <div class="task-stats">
+          <span class="stat">Total: <strong id="totalTasks">0</strong></span>
+          <span class="stat"
+            >Pendientes: <strong id="pendingTasks">0</strong></span
+          >
+          <span class="stat"
+            >Completadas: <strong id="completedTasks">0</strong></span
+          >
+        </div>
+      </div>
+
+      <div id="tasksList" class="tasks-list">
+        <!-- Las tareas se cargarán aquí dinámicamente -->
+      </div>
+
+      <div id="emptyState" class="empty-state">
+        <div class="empty-icon">📭</div>
+        <h3>No hay tareas</h3>
+        <p>
+          Comienza agregando tu primera tarea usando el formulario de arriba
+        </p>
+      </div>
+    </section>
+
+    <script src="script.js"></script>
+  </body>
+</html>
