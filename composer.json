@@ -1,8 +1,0 @@
-{
-  "name": "task-manager",
-  "description": "Task Manager con PHP y MySQL",
-  "type": "project",
-  "require": {
-    "php": "^8.0"
-  }
-}
