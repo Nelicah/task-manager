@@ -2,6 +2,12 @@
 
 Aplicación completa de gestión de tareas con frontend moderno (HTML, CSS, JavaScript) y backend en PHP con MySQL.
 
+## 🚀 Proceso de Desarrollo
+
+Este proyecto fue desarrollado inicialmente en un entorno local usando **XAMPP** (htdocs), lo que permitió un desarrollo ágil e iterativo con pruebas constantes en un servidor Apache local. Una vez completada la funcionalidad y validada la aplicación, el código fue migrado a un repositorio de GitHub independiente para facilitar el despliegue en **Zeabur**.
+
+**Nota sobre el historial de commits:** El historial de Git refleja principalmente la migración y preparación para producción, ya que el desarrollo principal se realizó en el entorno local de XAMPP. Esta es una práctica común cuando se trabaja con herramientas de desarrollo local antes de establecer el repositorio para deployment.
+
 ## 🎯 Características
 
 - ✅ **CRUD Completo**: Crear, Leer, Actualizar y Eliminar tareas
