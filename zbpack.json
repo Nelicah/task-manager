@@ -1,0 +1,4 @@
+{
+  "build_command": "composer install",
+  "start_command": "php -S 0.0.0.0:$PORT -t ."
+}
