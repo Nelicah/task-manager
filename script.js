@@ -1,5 +1,5 @@
 // Configuración de la API
-const API_URL = "http://localhost/task-manager/api";
+const API_URL = "https://nelicah-task-manager.zeabur.app/api";
 
 // Estado de la aplicación
 let tasks = [];
