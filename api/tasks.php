@@ -2,6 +2,14 @@
 // Incluir la configuración de base de datos
 require_once 'config.php';
 
+// Verificar autenticación
+session_start();
+if (!isset($_SESSION['usuario_id'])) {
+    http_response_code(401);
+    echo json_encode(['success' => false, 'message' => 'No autorizado']);
+    exit;
+}
+
 // Indicar que la respuesta será JSON
 header('Content-Type: application/json');
 
@@ -15,21 +23,23 @@ $conn = conectarDB();
 // ENRUTADOR - Según el método HTTP, ejecutar función
 // =====================================================
 try {
+    $usuario_id = $_SESSION['usuario_id'];
+
     switch ($metodo) {
         case 'GET':
-            obtenerTareas($conn);
+            obtenerTareas($conn, $usuario_id);
             break;
 
         case 'POST':
-            crearTarea($conn);
+            crearTarea($conn, $usuario_id);
             break;
 
         case 'PUT':
-            actualizarTarea($conn);
+            actualizarTarea($conn, $usuario_id);
             break;
 
         case 'DELETE':
-            eliminarTarea($conn);
+            eliminarTarea($conn, $usuario_id);
             break;
 
         default:
@@ -52,25 +62,26 @@ try {
 // =====================================================
 // FUNCIÓN GET - Obtener todas las tareas
 // =====================================================
-function obtenerTareas($conn)
+function obtenerTareas($conn, $usuario_id)
 {
     try {
         // Consulta SQL ordenada por prioridad y fecha
-        $sql = "SELECT id, title, description, priority, due_date, completed, 
+        $sql = "SELECT id, title, description, priority, due_date, completed,
                        created_at
-                FROM tasks 
-                ORDER BY 
-                    CASE priority 
-                        WHEN 'alta' THEN 1 
-                        WHEN 'media' THEN 2 
-                        WHEN 'baja' THEN 3 
+                FROM tasks
+                WHERE usuario_id = :usuario_id
+                ORDER BY
+                    CASE priority
+                        WHEN 'alta' THEN 1
+                        WHEN 'media' THEN 2
+                        WHEN 'baja' THEN 3
                     END,
                     completed ASC,
                     due_date ASC,
                     created_at DESC";
 
         $stmt = $conn->prepare($sql);
-        $stmt->execute();
+        $stmt->execute([':usuario_id' => $usuario_id]);
         $tareas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         // Devolver respuesta exitosa
@@ -91,7 +102,7 @@ function obtenerTareas($conn)
 // =====================================================
 // FUNCIÓN POST - Crear nueva tarea
 // =====================================================
-function crearTarea($conn)
+function crearTarea($conn, $usuario_id)
 {
     // Obtener los datos enviados desde el frontend
     $data = json_decode(file_get_contents('php://input'), true);
@@ -119,13 +130,14 @@ function crearTarea($conn)
 
     try {
         // Preparar consulta SQL con placeholders
-        $sql = "INSERT INTO tasks (title, description, priority, due_date) 
-                VALUES (:title, :description, :priority, :due_date)";
+        $sql = "INSERT INTO tasks (usuario_id, title, description, priority, due_date)
+                VALUES (:usuario_id, :title, :description, :priority, :due_date)";
 
         $stmt = $conn->prepare($sql);
 
         // Ejecutar con los datos (prepared statement previene SQL injection)
         $stmt->execute([
+            ':usuario_id' => $usuario_id,
             ':title' => trim($data['title']),
             ':description' => isset($data['description']) ? trim($data['description']) : null,
             ':priority' => $data['priority'],
@@ -153,7 +165,7 @@ function crearTarea($conn)
 // =====================================================
 // FUNCIÓN PUT - Actualizar tarea existente
 // =====================================================
-function actualizarTarea($conn)
+function actualizarTarea($conn, $usuario_id)
 {
     // Obtener los datos enviados desde el frontend
     $data = json_decode(file_get_contents('php://input'), true);
@@ -169,10 +181,10 @@ function actualizarTarea($conn)
     }
 
     try {
-        // Verificar si la tarea existe
-        $checkSql = "SELECT id FROM tasks WHERE id = :id";
+        // Verificar si la tarea existe y pertenece al usuario
+        $checkSql = "SELECT id FROM tasks WHERE id = :id AND usuario_id = :usuario_id";
         $checkStmt = $conn->prepare($checkSql);
-        $checkStmt->execute([':id' => $data['id']]);
+        $checkStmt->execute([':id' => $data['id'], ':usuario_id' => $usuario_id]);
 
         if ($checkStmt->rowCount() === 0) {
             http_response_code(404);
@@ -234,7 +246,8 @@ function actualizarTarea($conn)
         }
 
         // Construir y ejecutar la consulta
-        $sql = "UPDATE tasks SET " . implode(', ', $camposActualizar) . " WHERE id = :id";
+        $parametros[':usuario_id'] = $usuario_id;
+        $sql = "UPDATE tasks SET " . implode(', ', $camposActualizar) . " WHERE id = :id AND usuario_id = :usuario_id";
         $stmt = $conn->prepare($sql);
         $stmt->execute($parametros);
 
@@ -254,7 +267,7 @@ function actualizarTarea($conn)
 // =====================================================
 // FUNCIÓN DELETE - Eliminar tarea
 // =====================================================
-function eliminarTarea($conn)
+function eliminarTarea($conn, $usuario_id)
 {
     // Obtener los datos enviados desde el frontend
     $data = json_decode(file_get_contents('php://input'), true);
@@ -271,9 +284,9 @@ function eliminarTarea($conn)
 
     try {
         // Preparar y ejecutar consulta DELETE
-        $sql = "DELETE FROM tasks WHERE id = :id";
+        $sql = "DELETE FROM tasks WHERE id = :id AND usuario_id = :usuario_id";
         $stmt = $conn->prepare($sql);
-        $stmt->execute([':id' => $data['id']]);
+        $stmt->execute([':id' => $data['id'], ':usuario_id' => $usuario_id]);
 
         // Verificar si se eliminó alguna fila
         if ($stmt->rowCount() === 0) {

@@ -1,133 +1,90 @@
 # 📋 Task Manager - Gestor de Tareas
 
-Aplicación completa de gestión de tareas con frontend moderno (HTML, CSS, JavaScript) y backend en PHP con MySQL.
+Aplicación fullstack de gestión de tareas con autenticación de usuarios, permisos por usuario y CRUD completo. Frontend en HTML, CSS y JavaScript; backend en PHP con MySQL. Desplegada en producción en **Zeabur**.
 
 ## 🚀 Proceso de Desarrollo
 
-Este proyecto fue desarrollado inicialmente en un entorno local usando **XAMPP** (htdocs), lo que permitió un desarrollo ágil e iterativo con pruebas constantes en un servidor Apache local. Una vez completada la funcionalidad y validada la aplicación, el código fue migrado a un repositorio de GitHub independiente para facilitar el despliegue en **Zeabur**.
+Este proyecto fue desarrollado en un entorno local usando **XAMPP** (htdocs), lo que permitió un desarrollo ágil e iterativo con pruebas constantes en un servidor Apache local. Una vez completada la funcionalidad y validada la aplicación, el código fue migrado a un repositorio de GitHub para el despliegue en **Zeabur**.
 
-**Nota sobre el historial de commits:** El historial de Git refleja principalmente la migración y preparación para producción, ya que el desarrollo principal se realizó en el entorno local de XAMPP. Esta es una práctica común cuando se trabaja con herramientas de desarrollo local antes de establecer el repositorio para deployment.
+**Nota sobre el historial de commits:** El historial de Git refleja principalmente la migración y preparación para producción, ya que el desarrollo principal se realizó en el entorno local de XAMPP. Esta es una práctica habitual cuando se trabaja con herramientas de desarrollo local antes de establecer el repositorio para deployment.
 
 ## 🎯 Características
 
+### Autenticación
+- 🔐 **Registro de usuarios** con validación y hash de contraseña (bcrypt)
+- 🔑 **Login / Logout** con gestión de sesiones PHP
+- 🛡️ **Protección de rutas** — redirige al login si no hay sesión activa
+- 👤 **Header dinámico** con nombre del usuario y botón de cerrar sesión
+
+### Tareas
 - ✅ **CRUD Completo**: Crear, Leer, Actualizar y Eliminar tareas
-- ✅ **Interfaz Moderna**: Diseño responsivo con gradientes y animaciones
-- 🔍 **Filtros y Búsqueda**: Filtra por estado, prioridad y busca por texto
-- 📊 **Estadísticas en Tiempo Real**: Contadores de tareas totales, pendientes y completadas
+- 🔒 **Aislamiento por usuario**: cada usuario solo ve y gestiona sus propias tareas
 - 🎨 **Sistema de Prioridades**: Alta (🔴), Media (🟡), Baja (🟢)
-- 📅 **Fechas Límite**: Con indicador de tareas vencidas
-- ✨ **Notificaciones Toast**: Feedback visual con mensajes temporales
-- 📱 **Totalmente Responsivo**: Funciona en móviles, tablets y desktop
-- 🔒 **Seguridad**: Prepared statements para prevenir SQL Injection
+- 📅 **Fechas Límite** con indicador de tareas vencidas
+- 🔍 **Filtros y Búsqueda**: por estado, prioridad y texto libre
+- 📊 **Estadísticas en Tiempo Real**: total, pendientes y completadas
+- ✨ **Notificaciones Toast**: feedback visual temporal
+- 📱 **Totalmente Responsivo**: móvil, tablet y desktop
 
 ## 🛠️ Tecnologías
 
 ### Frontend
-
 - HTML5
 - CSS3 (Variables CSS, Flexbox, Grid, Animaciones)
 - JavaScript ES6+ (Fetch API, Async/Await, Vanilla JS)
 - Sin dependencias externas
 
 ### Backend
-
 - PHP 7.4+ con PDO
 - MySQL 5.7+ / MariaDB
 - API RESTful (un endpoint, múltiples métodos HTTP)
+- Sesiones PHP para autenticación
 
 ## 📁 Estructura del Proyecto
 
 ```
 task-manager/
-├── index.html          # Página principal
-├── styles.css          # Estilos CSS
-├── script.js           # Lógica JavaScript
-└── api/
-    ├── config.php      # Configuración de base de datos
-    └── tasks.php       # API RESTful con CRUD completo
+├── index.php               # Entrada principal (protegida, inyecta header de usuario)
+├── index.html              # Interfaz de la aplicación
+├── login.php               # Formulario de inicio de sesión
+├── registro.php            # Formulario de registro
+├── logout.php              # Cierre de sesión
+├── config/
+│   └── database.php        # Configuración PDO (clase Database)
+├── models/
+│   └── Usuario.php         # Modelo de usuario (login, registro, validación)
+├── includes/
+│   └── auth_check.php      # Middleware de autenticación
+├── api/
+│   ├── config.php          # Configuración de BD para la API
+│   └── tasks.php           # API RESTful con CRUD completo
+└── styles/
+    ├── main.css             # Estilos principales
+    └── auth.css             # Estilos de login/registro
 ```
-
-### Validaciones Implementadas
-
-El backend valida:
-
-- ✅ Título no vacío
-- ✅ Prioridad válida (baja, media o alta)
-- ✅ ID existe antes de actualizar/eliminar
-- ✅ Formato de datos correcto
 
 ## 🔒 Seguridad Implementada
 
-- ✅ **Prepared Statements** - Previene SQL Injection
-- ✅ **Validación de datos** - Verifica título, prioridad, ID
-- ✅ **Escapado de HTML** - Previene XSS en el frontend con `escapeHtml()`
-- ✅ **trim()** - Limpia espacios en blanco de los inputs
-- ✅ **Headers CORS** - Configurados correctamente
-- ✅ **Try-Catch** - Manejo de errores sin exponer información sensible
-- ✅ **Códigos HTTP apropiados** - 200, 201, 400, 404, 500
+- ✅ **Prepared Statements** — previene SQL Injection en todas las queries
+- ✅ **password_hash / password_verify** — contraseñas nunca en texto plano
+- ✅ **Autenticación por sesión** — rutas y API protegidas
+- ✅ **Aislamiento de datos** — `usuario_id` en todas las operaciones CRUD
+- ✅ **htmlspecialchars()** — previene XSS en outputs PHP
+- ✅ **Validación de datos** — título, prioridad, ID en backend
+- ✅ **Códigos HTTP apropiados** — 200, 201, 400, 401, 404, 500
+- ✅ **Try-Catch** — manejo de errores sin exponer información sensible
 
-## 🎯 Funciones JavaScript Principales
+## 🎯 Lo que Demuestra este Proyecto
 
-```javascript
-loadTasks(); // Carga todas las tareas desde la API
-handleSubmit(e); // Crea o actualiza una tarea
-editTask(taskId); // Prepara el formulario para editar
-deleteTask(taskId); // Elimina una tarea con confirmación
-toggleTaskComplete(); // Marca como completada o reabre
-filterTasks(); // Aplica filtros de búsqueda
-showToast(msg, type); // Muestra notificaciones temporales
-```
-
-### Lo que Demuestra este Proyecto
-
-✅ **Fullstack Development** - Frontend y Backend integrados  
-✅ **API RESTful** - Conocimiento de arquitectura moderna  
-✅ **Seguridad** - Prepared statements, validaciones, XSS prevention  
-✅ **UX/UI** - Diseño responsivo, animaciones, feedback visual  
-✅ **JavaScript Moderno** - Async/await, Fetch API, ES6+  
-✅ **PHP Moderno** - PDO, manejo de JSON, try-catch  
-✅ **Base de Datos** - Diseño de tablas, índices, tipos de datos  
-✅ **Problem Solving** - Manejo de edge cases y errores
-
-## ✨ Características del Frontend
-
-### Notificaciones Toast
-
-Mensajes temporales que aparecen y desaparecen:
-
-- Verde: Operación exitosa
-- Rojo: Error
-- Amarillo: Advertencia
-
-### Animaciones CSS
-
-- Fade in al cargar
-- Hover effects en tarjetas
-- Transiciones suaves
-- Loading spinner
-
-### Sistema de Filtros
-
-- Por estado (todas, pendientes, completadas)
-- Por prioridad (todas, alta, media, baja)
-- Búsqueda en tiempo real por título/descripción
-
-### Diseño Responsivo
-
-Breakpoints optimizados:
-
-- Mobile: < 768px
-- Tablet: 768px - 1199px
-- Desktop: 1200px+
-
-## 📝 Notas Finales
-
-- ✅ Compatible con navegadores modernos (Chrome, Firefox, Safari, Edge)
-- ✅ Sin dependencias de librerías externas (jQuery, Bootstrap, etc.)
-- ✅ Código limpio y bien comentado
-- ✅ Arquitectura escalable y mantenible
-- ✅ Preparado para producción con validaciones y seguridad
-- ✅ Diseñado pensando en la experiencia del usuario
+✅ **Fullstack Development** — frontend y backend integrados
+✅ **Autenticación y permisos** — sesiones, hash, aislamiento por usuario
+✅ **API RESTful** — arquitectura moderna con métodos HTTP
+✅ **Seguridad** — prepared statements, bcrypt, validaciones, XSS prevention
+✅ **UX/UI** — diseño responsivo, animaciones, feedback visual
+✅ **JavaScript Moderno** — async/await, Fetch API, ES6+
+✅ **PHP Moderno** — PDO, sesiones, OOP, manejo de JSON
+✅ **Base de Datos** — diseño de tablas, relaciones, índices
+✅ **Despliegue en producción** — configuración para Zeabur
 
 ---
 
