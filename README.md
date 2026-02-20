@@ -76,15 +76,15 @@ task-manager/
 
 ## 🎯 Lo que Demuestra este Proyecto
 
-✅ **Fullstack Development** — frontend y backend integrados
-✅ **Autenticación y permisos** — sesiones, hash, aislamiento por usuario
-✅ **API RESTful** — arquitectura moderna con métodos HTTP
-✅ **Seguridad** — prepared statements, bcrypt, validaciones, XSS prevention
-✅ **UX/UI** — diseño responsivo, animaciones, feedback visual
-✅ **JavaScript Moderno** — async/await, Fetch API, ES6+
-✅ **PHP Moderno** — PDO, sesiones, OOP, manejo de JSON
-✅ **Base de Datos** — diseño de tablas, relaciones, índices
-✅ **Despliegue en producción** — configuración para Zeabur
+- ✅ **Fullstack Development** — frontend y backend integrados
+- ✅ **Autenticación y permisos** — sesiones, hash, aislamiento por usuario
+- ✅ **API RESTful** — arquitectura moderna con métodos HTTP
+- ✅ **Seguridad** — prepared statements, bcrypt, validaciones, XSS prevention
+- ✅ **UX/UI** — diseño responsivo, animaciones, feedback visual
+- ✅ **JavaScript Moderno** — async/await, Fetch API, ES6+
+- ✅ **PHP Moderno** — PDO, sesiones, OOP, manejo de JSON
+- ✅ **Base de Datos** — diseño de tablas, relaciones, índices
+- ✅ **Despliegue en producción** — configuración para Zeabur
 
 ---
 
