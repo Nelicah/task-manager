@@ -1,5 +1,40 @@
 <?php
 session_start();
+
+require_once 'config/database.php';
+require_once 'models/Usuario.php';
+
+// Si ya está logueado, redirigir
+if (isset($_SESSION['usuario_id'])) {
+    header("Location: index.php");
+    exit();
+}
+
+$error = "";
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $database = new Database();
+    $db = $database->getConnection();
+    $usuario = new Usuario($db);
+
+    $usuario->email = $_POST['email'];
+    $usuario->password = $_POST['password'];
+
+    if (empty($usuario->email) || empty($usuario->password)) {
+        $error = "Todos los campos son obligatorios";
+    } else {
+        if ($usuario->login()) {
+            $_SESSION['usuario_id'] = $usuario->id;
+            $_SESSION['usuario_nombre'] = $usuario->nombre;
+            $_SESSION['usuario_email'] = $usuario->email;
+
+            header("Location: index.php");
+            exit();
+        } else {
+            $error = "Email o contraseña incorrectos";
+        }
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -14,45 +49,6 @@ session_start();
 <body>
     <div class="auth-container">
         <h1>🔐 Iniciar Sesión</h1>
-
-        <?php
-
-        // Si ya está logueado, redirigir
-        if (isset($_SESSION['usuario_id'])) {
-            header("Location: index.php");
-            exit();
-        }
-
-        $error = "";
-
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            require_once 'config/database.php';
-            require_once 'models/Usuario.php';
-
-            $database = new Database();
-            $db = $database->getConnection();
-            $usuario = new Usuario($db);
-
-            $usuario->email = $_POST['email'];
-            $usuario->password = $_POST['password'];
-
-            if (empty($usuario->email) || empty($usuario->password)) {
-                $error = "Todos los campos son obligatorios";
-            } else {
-                if ($usuario->login()) {
-                    // Login exitoso
-                    $_SESSION['usuario_id'] = $usuario->id;
-                    $_SESSION['usuario_nombre'] = $usuario->nombre;
-                    $_SESSION['usuario_email'] = $usuario->email;
-
-                    header("Location: index.php");
-                    exit();
-                } else {
-                    $error = "Email o contraseña incorrectos";
-                }
-            }
-        }
-        ?>
 
         <div class="demo-info">
             <strong>👤 Usuario Demo:</strong>
