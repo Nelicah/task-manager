@@ -23,8 +23,19 @@ try {
   $conn->exec($sql);
   echo "<p>✅ Tabla 'tasks' creada correctamente</p>";
 
+  $sql2 = "CREATE TABLE IF NOT EXISTS usuarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    email VARCHAR(150) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
+
+  $conn->exec($sql2);
+  echo "<p>✅ Tabla 'usuarios' creada correctamente</p>";
+
   echo "<p><strong>Base de datos configurada correctamente!</strong></p>";
-  echo "<p><a href='index.html'>Ir a la aplicación →</a></p>";
+  echo "<p><a href='index.php'>Ir a la aplicación →</a></p>";
 } catch (PDOException $e) {
   echo "<p>❌ Error: " . $e->getMessage() . "</p>";
 }
