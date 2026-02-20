@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -13,7 +16,6 @@
         <h1>🔐 Iniciar Sesión</h1>
 
         <?php
-        session_start();
 
         // Si ya está logueado, redirigir
         if (isset($_SESSION['usuario_id'])) {
