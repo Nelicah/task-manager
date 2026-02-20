@@ -2,7 +2,7 @@
 require_once 'includes/auth_check.php';
 
 // Si piden el root, mostrar index.html
-if ($_SERVER['REQUEST_URI'] === '/' || str_ends_with($_SERVER['REQUEST_URI'], 'index.php')) {
+if ($_SERVER['REQUEST_URI'] === '/' || str_ends_with($_SERVER['REQUEST_URI'], 'index.php') || str_ends_with($_SERVER['REQUEST_URI'], '/')) {
   $html = file_get_contents('index.html');
 
   $userHeader = '<div class="user-header">

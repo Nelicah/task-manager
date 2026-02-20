@@ -23,6 +23,18 @@ try {
   $conn->exec($sql);
   echo "<p>✅ Tabla 'tasks' creada correctamente</p>";
 
+  // Añadir columna usuario_id si no existe (error 1060 = columna duplicada, se ignora)
+  try {
+    $conn->exec("ALTER TABLE tasks ADD COLUMN usuario_id INT NOT NULL DEFAULT 0 AFTER id");
+    echo "<p>✅ Columna 'usuario_id' añadida a 'tasks'</p>";
+  } catch (PDOException $e) {
+    if ($e->errorInfo[1] == 1060) {
+      echo "<p>ℹ️ Columna 'usuario_id' ya existe en 'tasks'</p>";
+    } else {
+      throw $e;
+    }
+  }
+
   $sql2 = "CREATE TABLE IF NOT EXISTS usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
