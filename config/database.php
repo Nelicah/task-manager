@@ -3,11 +3,21 @@
 
 class Database
 {
-  private $host = "localhost";
-  private $database_name = "task_manager";
-  private $username = "root";
-  private $password = "";
+  private $host;
+  private $port;
+  private $database_name;
+  private $username;
+  private $password;
   public $conn;
+
+  public function __construct()
+  {
+    $this->host          = getenv('MYSQL_HOST')     ?: 'localhost';
+    $this->port          = getenv('MYSQL_PORT')     ?: '3307';
+    $this->database_name = getenv('MYSQL_DATABASE') ?: 'task_manager';
+    $this->username      = getenv('MYSQL_USERNAME') ?: 'root';
+    $this->password      = getenv('MYSQL_PASSWORD') ?: '';
+  }
 
   public function getConnection()
   {
@@ -15,7 +25,7 @@ class Database
 
     try {
       $this->conn = new PDO(
-        "mysql:host=" . $this->host . ";port=3307;dbname=" . $this->database_name,
+        "mysql:host=" . $this->host . ";port=" . $this->port . ";dbname=" . $this->database_name,
         $this->username,
         $this->password
       );
