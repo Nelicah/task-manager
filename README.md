@@ -1,10 +1,10 @@
 # 📋 Task Manager - Gestor de Tareas
 
-Aplicación fullstack de gestión de tareas con autenticación de usuarios, permisos por usuario y CRUD completo. Frontend en HTML, CSS y JavaScript; backend en PHP con MySQL. Desplegada en producción en **Zeabur**.
+Aplicación fullstack de gestión de tareas con autenticación de usuarios, permisos por usuario y CRUD completo. Frontend en HTML, CSS y JavaScript; backend en PHP con MySQL. Desplegada en producción en **Render** con Docker.
 
 ## 🚀 Proceso de Desarrollo
 
-Este proyecto fue desarrollado en un entorno local usando **XAMPP** (htdocs), lo que permitió un desarrollo ágil e iterativo con pruebas constantes en un servidor Apache local. Una vez completada la funcionalidad y validada la aplicación, el código fue migrado a un repositorio de GitHub para el despliegue en **Zeabur**.
+Este proyecto fue desarrollado en un entorno local usando **XAMPP** (htdocs), lo que permitió un desarrollo ágil e iterativo con pruebas constantes en un servidor Apache local. Una vez completada la funcionalidad y validada la aplicación, el código fue migrado a un repositorio de GitHub y desplegado en **Render** mediante Docker, con base de datos MySQL en **Aiven**.
 
 **Nota sobre el historial de commits:** El historial de Git refleja principalmente la migración y preparación para producción, ya que el desarrollo principal se realizó en el entorno local de XAMPP. Esta es una práctica habitual cuando se trabaja con herramientas de desarrollo local antes de establecer el repositorio para deployment.
 
@@ -49,6 +49,10 @@ task-manager/
 ├── login.php               # Formulario de inicio de sesión
 ├── registro.php            # Formulario de registro
 ├── logout.php              # Cierre de sesión
+├── setup.php               # Inicialización de la base de datos
+├── Dockerfile              # Imagen Docker (PHP 8.2 + Apache)
+├── docker-entrypoint.sh    # Script de inicio para inyectar variables de entorno
+├── render.yaml             # Configuración de despliegue en Render
 ├── config/
 │   └── database.php        # Configuración PDO (clase Database)
 ├── models/
@@ -84,7 +88,8 @@ task-manager/
 - ✅ **JavaScript Moderno** — async/await, Fetch API, ES6+
 - ✅ **PHP Moderno** — PDO, sesiones, OOP, manejo de JSON
 - ✅ **Base de Datos** — diseño de tablas, relaciones, índices
-- ✅ **Despliegue en producción** — configuración para Zeabur
+- ✅ **Containerización con Docker** — imagen PHP + Apache, entrypoint personalizado
+- ✅ **Despliegue en producción** — Render + base de datos MySQL en Aiven
 
 ---
 
