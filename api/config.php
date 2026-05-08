@@ -41,12 +41,11 @@ function conectarDB()
         $conexion = new PDO($dsn, DB_USER, DB_PASS);
         $conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         return $conexion;
-    } catch (PDOException $e) {
+    } catch (PDOException) {
         http_response_code(500);
         echo json_encode([
             'success' => false,
-            'message' => 'Error de conexión a la base de datos',
-            'details' => $e->getMessage() // Para debug, quita esto en producción
+            'message' => 'Error de conexión a la base de datos'
         ]);
         exit;
     }
