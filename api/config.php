@@ -7,12 +7,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit(0);
 }
 
-// Variables de entorno de Zeabur (o valores locales para desarrollo)
-define('DB_HOST', getenv('MYSQL_HOST') ?: 'localhost');
-define('DB_NAME', getenv('MYSQL_DATABASE') ?: 'task_manager');
-define('DB_USER', getenv('MYSQL_USERNAME') ?: 'root');
-define('DB_PASS', getenv('MYSQL_PASSWORD') ?: '');
-define('DB_PORT', getenv('MYSQL_PORT') ?: '3307');
+// Cargar .env si existe
+$envFile = __DIR__ . '/../.env';
+if (file_exists($envFile)) {
+    $lines = file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    foreach ($lines as $line) {
+        if (str_starts_with(trim($line), '#')) continue;
+        if (!str_contains($line, '=')) continue;
+        [$name, $value] = explode('=', $line, 2);
+        $name = trim($name);
+        $value = trim($value);
+        if (!getenv($name)) {
+            putenv("$name=$value");
+        }
+    }
+}
+
+define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
+define('DB_NAME', getenv('DB_NAME') ?: 'task_manager');
+define('DB_USER', getenv('DB_USER') ?: 'root');
+define('DB_PASS', getenv('DB_PASS') ?: '');
+define('DB_PORT', getenv('DB_PORT') ?: '3306');
 
 function conectarDB()
 {
