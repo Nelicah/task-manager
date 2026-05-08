@@ -12,11 +12,21 @@ class Database
 
   public function __construct()
   {
-    $this->host          = getenv('MYSQL_HOST')     ?: 'localhost';
-    $this->port          = getenv('MYSQL_PORT')     ?: '3307';
-    $this->database_name = getenv('MYSQL_DATABASE') ?: 'task_manager';
-    $this->username      = getenv('MYSQL_USERNAME') ?: 'root';
-    $this->password      = getenv('MYSQL_PASSWORD') ?: '';
+    $envFile = __DIR__ . '/../.env';
+    if (file_exists($envFile)) {
+      $lines = file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+      foreach ($lines as $line) {
+        if (str_starts_with(trim($line), '#') || !str_contains($line, '=')) continue;
+        [$name, $value] = explode('=', $line, 2);
+        if (!getenv(trim($name))) putenv(trim($name) . '=' . trim($value));
+      }
+    }
+
+    $this->host          = getenv('DB_HOST')     ?: 'localhost';
+    $this->port          = getenv('DB_PORT')     ?: '3306';
+    $this->database_name = getenv('DB_NAME')     ?: 'task_manager';
+    $this->username      = getenv('DB_USER')     ?: 'root';
+    $this->password      = getenv('DB_PASS')     ?: '';
   }
 
   public function getConnection()
